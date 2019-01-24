@@ -1,0 +1,77 @@
+---
+title: "Assignment 3"
+author: "Sehaj Raina"
+date: "January 22, 2019"
+output: html_document
+---
+```{r}
+library(dplyr)
+```
+
+#1. Importing data
+
+```{r import data}
+MyData<-read.csv("Sequences.csv", header=FALSE) 
+
+MyData
+names(MyData)
+```
+
+
+3.make dataframe
+
+```{r}
+dat1<-MyData %>% 
+  filter(grepl('2|3|4',V1)) %>% 
+  rename("I.D"=V1, "Strain"=V2)
+
+dat1
+```
+
+2. extract
+```{r}
+Strain1<-gsub("[^GCAT]","", dat1$Strain[1])
+Strain2<-gsub("[^GCAT]","", dat1$Strain[2])
+Strain3<-gsub("[^GCAT]","", dat1$Strain[3])
+```
+
+```{r}
+dat1$I.D <- c("HQ433692.1","HQ433694.1","HQ433691.1")
+dat1$Strain <- c("QLZP1","CS4","GL18")
+dat1$Sequence <- c(Strain1, Strain2, Strain3)
+dat1
+```
+
+Print
+```{r}
+print(dat1$Sequence[1])
+print(dat1$Sequence[2])
+print(dat1$Sequence[3])
+```
+
+number of nucleotide - MAKE TABLE
+```{r}
+dat1$Number_of_G<- sapply(gregexpr("G", dat1$Sequence), length)
+dat1$Number_of_C<- sapply(gregexpr("C", dat1$Sequence), length)
+dat1$Number_of_A<- sapply(gregexpr("A", dat1$Sequence), length)
+dat1$Number_of_T<- sapply(gregexpr("T", dat1$Sequence), length)
+
+
+mutate(dat1, TotalBP=Number_of_G + Number_of_C + Number_of_A + Number_of_T, 
+       GC_Content =((Number_of_G + Number_of_C)/TotalBP)*100)
+
+dat1
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
