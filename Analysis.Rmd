@@ -10,6 +10,7 @@ output: html_document
 ```{r}
 library(dplyr)
 library(knitr)
+library(ggplot2)
 ```
 
 2. Importing data
@@ -24,6 +25,7 @@ names(MyData) #Check column names
 ```{r}
 dat1<-MyData %>% 
   filter(grepl('2|3|4',V1)) %>% #Search V1 column for integers 2, 3 or 4 (share the rows containing the individual sequence for each strain) and filter only those specific rows
+  
   rename("I.D"=V1, "Strain"=V2) #Rename columns 
 ```
 
@@ -108,17 +110,22 @@ print(filter(Table1, I.D=="HQ433691.1"))
 
 #Image of *Borrelia burgdorferi*
 
-![*Borrelia burgdorferi*](lymedisease.jpg)
-[Image source](https://www.sciencesource.com/archive/Lyme-Disease--Borrelia-burgdorferi-Bacteria--SEM-SS2810888.html)
+![*Borrelia burgdorferi*](image.jpg)
+[Image source](https://mechpath.com/2015/12/01/borrelia-burgdorferi/)
 
 [More Information - Wikipedia](https://en.wikipedia.org/wiki/Borrelia_burgdorferi)
 
 #Scatterplot of %GC
-    Create an attractive, publication-worthy scatterplot of %GC using data from the file GC_content.csv. Note: You will have have to calculate %GC Content from this file, which shows %C and %G content for 1000 specimens. Make sure the points for each of the three ‘species’ can be distinguished in the graph as clearly as possible
+
+```{r}
+MyData2<-read.csv("GC_content.csv") #Import dataset
+MyData2$GC_content<-MyData2$G + MyData2$C #Add new column for GC content %
 
 
+qplot(Species,GC_content,data=MyData2, colour=Species, size=I(5),alpha=I(0.2), xlab="Species", ylab="%GC", main="%GC Content of Species from 1000 Specimens") + theme_classic() #Difficult to distinguish between points within each species
 
-
+qplot(ID,GC_content,data=MyData2,colour=Species, xlab="ID", ylab="%GC", main="%GC Content of Species from 1000 Specimens")+ theme_classic() #Less overlap of points within species
+```
 
 
 
